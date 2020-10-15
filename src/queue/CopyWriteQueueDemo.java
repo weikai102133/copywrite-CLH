@@ -40,7 +40,7 @@ public class CopyWriteQueueDemo {
                     e.printStackTrace();
                 }
                 //System.out.println(Thread.currentThread().getName()+"read begin"+System.currentTimeMillis());
-                for (int j = 0;j < 20;j++){
+                for (int j = 0;j < 2;j++){
                     try {
                         copyWriteQueue.getWithFlag();
                     } catch (InterruptedException e) {

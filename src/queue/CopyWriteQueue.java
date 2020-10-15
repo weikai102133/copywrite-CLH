@@ -12,6 +12,7 @@ public class CopyWriteQueue {
     private Object getLock = new Object();
     private Object addLock = new Object();
     private CLH clh = new CLH();
+    private NotifyQueue notifyQueue = new NotifyQueue();
 
     public CopyWriteQueue(int capacity){
         this.capacity = capacity;
@@ -57,12 +58,13 @@ public class CopyWriteQueue {
             }
             synchronized (getLock) {
                 if(queue[head.get()] != null) {
-                    //System.out.println(queue[head]);
+                    System.out.println(queue[head.get()]);
                     return queue[head.getAndIncrement()];
                 }else {
                     continue;
                 }
             }
+
         }
     }
 
@@ -86,14 +88,14 @@ public class CopyWriteQueue {
                 TimeUnit.MILLISECONDS.sleep(10);
                 continue;
             }
-            clh.lock();
+            notifyQueue.lock();
             // synchronized (getLock){
             if (flag.get() < 0) return null;
             flag.getAndDecrement();
-            System.out.println(queue[head.get()]);
-            System.out.println("flag is " + flag.get());
+            System.out.println(queue[head.get()]+"  "+Thread.currentThread().getName());
+            //System.out.println("flag is " + flag.get());
             // }
-            clh.unlock();
+            notifyQueue.unlock();
             return queue[head.getAndIncrement()];
         }
     }
